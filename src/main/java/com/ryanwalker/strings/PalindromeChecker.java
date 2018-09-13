@@ -3,7 +3,7 @@ package com.ryanwalker.strings;
 import java.util.Arrays;
 import java.util.List;
 
-public class PalindromeTest {
+public class PalindromeChecker {
 
   public static void main(String[] args) {
 
