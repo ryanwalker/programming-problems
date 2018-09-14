@@ -76,7 +76,81 @@ public class MergeSort {
     return mergedList;
   }
 
-  public static int[] sortArray() {
-    return null;
+  public static void sortArray(int[] array, int leftIndex, int rightIndex) {
+    if (array.length == 0 || array.length == 1) {
+      return;
+    }
+
+    if (array.length == 2) {
+      if (array[0] > array[1]) {
+        int larger = array[0];
+        array[0] = array[1];
+        array[1] = larger;
+      }
+      return;
+    }
+
+    //Split the list into two
+    int middleIndex = (rightIndex - leftIndex) / 2;
+
+    //recursive call to sort left and right list
+    if (leftIndex != rightIndex) {
+      sortArray(array, leftIndex, middleIndex);
+      sortArray(array, middleIndex + 1, rightIndex);
+    }
+
+    //merge them back together
+    mergeArrays(array, leftIndex, middleIndex, rightIndex);
+  }
+
+  private static void mergeArrays(int[] array, int leftIndex, int middleIndex, int rightIndex) {
+    //left array = leftIndex -> middleIndex, inclusive
+    //right array = middlIndex + 1 -> rightIndex, inclusive
+
+    int totalElement = rightIndex - leftIndex + 1;
+
+    if (totalElement == 1) {
+      return;
+    } else if (totalElement == 2) {
+      if (array[leftIndex] > array[rightIndex]) {
+        swap(array, leftIndex, rightIndex);
+      }
+      return;
+    } else {
+      while (totalElement > 0) {
+        boolean validLeftElement = (leftIndex <= middleIndex);
+        boolean validRightElement = rightIndex < array.length;
+
+        if (validLeftElement && validRightElement) {
+          int leftElement = array[leftIndex];
+          int rightElement = array[rightIndex];
+          if (leftElement > rightElement) {
+            swap(array, leftIndex, rightIndex);
+            leftElement++;
+          }
+        } else if (validLeftElement) {
+
+        } else {
+
+        }
+
+//        if (leftElement > rightElement) {
+//          array[leftIndex] = rightElement;
+//          array[rightIndex] = leftElement;
+//          leftIndex++;
+//        } else {
+//          rightIndex++;
+//        }
+//        totalElement++;
+      }
+    }
+  }
+
+  private static void swap(int[] array, int leftIndex, int rightIndex) {
+    int leftElement = array[leftIndex];
+    int rightElement = array[rightIndex];
+
+    array[leftIndex] = rightElement;
+    array[rightIndex] = leftElement;
   }
 }

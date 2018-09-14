@@ -1,5 +1,7 @@
 package com.ryanwalker.sorting;
 
+import static com.ryanwalker.TestUtil.printArray;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,6 @@ public class MergeSortTest {
     List<Integer> sortedList = MergeSort.sortList(list);
 
     Assertions.assertEquals(list, sortedList);
-
   }
 
   @Test
@@ -56,4 +57,21 @@ public class MergeSortTest {
 
     Assertions.assertEquals(Arrays.asList(1, 1, 2, 3, 3, 8, 46, 82, 99), sortedList);
   }
+
+  @Test
+  public void testMergeSortArray() {
+    int[] array = {3, 1};
+    printArray(array);
+    MergeSort.sortArray(array, 0, array.length - 1);
+    printArray(array);
+  }
+
+  @Test
+  public void testMergeSortArrayInOrder() {
+    int[] array = {1, 3};
+    printArray(array);
+    MergeSort.sortArray(array, 0, array.length - 1);
+    printArray(array);
+  }
+
 }
