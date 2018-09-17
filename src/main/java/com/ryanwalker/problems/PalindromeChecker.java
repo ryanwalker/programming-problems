@@ -1,4 +1,4 @@
-package com.ryanwalker.strings;
+package com.ryanwalker.problems;
 
 import java.util.Arrays;
 import java.util.List;
