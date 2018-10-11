@@ -13,12 +13,22 @@ public class GameGridTest {
    * 16  17  18 19 20
    */
   @Test
-  public void testInit() {
+  public void testTile7() {
     GameGrid grid = new GameGrid(5);
 
     Tile tileAtSeven = grid.getTileAtPosition(7);
 
-    Assertions.assertEquals(2, tileAtSeven.getRow());
-    Assertions.assertEquals(2, tileAtSeven.getCol());
+    Assertions.assertEquals(1, tileAtSeven.getRow());
+    Assertions.assertEquals(1, tileAtSeven.getCol());
+  }
+
+  @Test
+  public void testTile20() {
+    GameGrid grid = new GameGrid(5);
+
+    Tile tileAtSeven = grid.getTileAtPosition(20);
+
+    Assertions.assertEquals(4, tileAtSeven.getRow());
+    Assertions.assertEquals(4, tileAtSeven.getCol());
   }
 }

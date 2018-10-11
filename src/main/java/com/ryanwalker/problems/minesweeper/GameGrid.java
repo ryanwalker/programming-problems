@@ -35,10 +35,10 @@ public class GameGrid {
   }
 
   public Tile getTileAtPosition(int tileNumber) {
-    int row = tileNumber / width + 1;
-    int col = 0;
+    int row = tileNumber / width;
+    int col;
 
-    if (tileNumber % width > 0) {
+    if (tileNumber % width == 0) {
       row--;
     }
 
@@ -51,13 +51,13 @@ public class GameGrid {
     // 0.75
     BigDecimal fractionPart = num.remainder(BigDecimal.ONE);
 
-    if (fractionPart.equals(0)) {
-      col = width - 1;
+    if (fractionPart.compareTo(new BigDecimal(0)) == 0) {
+      col = width;
     } else {
       col = (fractionPart.multiply(BigDecimal.valueOf(width))
           .subtract(new BigDecimal(1))).intValue();
     }
 
-    return grid[row][col];
+    return grid[row - 1][col - 1];
   }
 }

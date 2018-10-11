@@ -26,7 +26,7 @@ public class PalindromeChecker {
       if (candidate.charAt(beginCursor) != candidate.charAt(endCursor)) {
         return candidate + " is NOT a palindrome";
       }
-//TODO - solve whitespace bug
+      //TODO - solve whitespace bug
       beginCursor++;
       endCursor--;
     }

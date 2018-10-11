@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class MaxHeap {
+public class Heap {
 
   private int[] array = new int[10];
   private int lastIndex;
