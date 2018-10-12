@@ -21,18 +21,14 @@ import java.util.List;
 
       0     1     2     3
   -------------------------
-0  |  1  |  1  |  1  |  1  |
+0  |  1  |  1  |  0  |  0  |
   -------------------------
-1  |  1  |  0  |  9  |  0  |
+1  |  0  |  1  |  1  |  1  |
   -------------------------
-2  |  0  |  0  |  0  |  0  |
+2  |  9  |  0  |  0  |  1  |
   -------------------------
-3  |  0  |  1  |  9  |  1  |
+3  |  1  |  1  |  1  |  1  |
   -------------------------
-
-
-
-
 
  */
 
@@ -52,11 +48,12 @@ public class MazeSolver2 {
   }
 
   public static void main(String[] args) {
-    List<Integer> row1 = Arrays.asList(1, 1, 1);
-    List<Integer> row2 = Arrays.asList(1, 0, 9);
-    List<Integer> row3 = Arrays.asList(0, 0, 0);
+    List<Integer> row1 = Arrays.asList(1, 1, 0, 0);
+    List<Integer> row2 = Arrays.asList(0, 1, 1, 1);
+    List<Integer> row3 = Arrays.asList(9, 0, 0, 1);
+    List<Integer> row4 = Arrays.asList(1, 1, 1, 1);
 
-    List<List<Integer>> lot = Arrays.asList(row1, row2, row3);
+    List<List<Integer>> lot = Arrays.asList(row1, row2, row3, row4);
 
     MazeSolver2 solver = new MazeSolver2();
 
@@ -84,24 +81,40 @@ public class MazeSolver2 {
 
     Coordinate up = getCoordinate(Direction.Up, row, col);
     if (up != null) {
-      return explore(up.row, up.column, ++distanceTraveled);
+      int traveled = explore(up.row, up.column, ++distanceTraveled);
+      if (traveled > -1) {
+        return traveled;
+      }
+      distanceTraveled--;
     }
 
     Coordinate down = getCoordinate(Direction.Down, row, col);
     if (down != null) {
-      return explore(down.row, down.column, ++distanceTraveled);
+      int traveled = explore(down.row, down.column, ++distanceTraveled);
+      if (traveled > -1) {
+        return traveled;
+      }
+      distanceTraveled--;
     }
 
     Coordinate left = getCoordinate(Direction.Left, row, col);
     if (left != null) {
-      return explore(left.row, left.column, ++distanceTraveled);
+      int traveled = explore(left.row, left.column, ++distanceTraveled);
+      if (traveled > -1) {
+        return traveled;
+      }
+      distanceTraveled--;
     }
 
     Coordinate right = getCoordinate(Direction.Right, row, col);
     if (right != null) {
-      return explore(right.row, right.column, ++distanceTraveled);
+      int traveled = explore(right.row, right.column, ++distanceTraveled);
+      if (traveled > -1) {
+        return traveled;
+      }
+      distanceTraveled--;
     }
-//TODO - i can't return the explore value, i need to calculate it and store it or something 
+    distanceTraveled--;
     return -1;
   }
 
