@@ -4,12 +4,6 @@ package com.ryanwalker.problems.amazonrobotclear;
 // SOME CLASSES WITHIN A PACKAGE MAY BE RESTRICTED
 // DEFINE ANY CLASS AND METHOD NEEDED
 
-import static com.ryanwalker.problems.amazonrobotclear.MazeSolver.Direction.Down;
-import static com.ryanwalker.problems.amazonrobotclear.MazeSolver.Direction.Left;
-import static com.ryanwalker.problems.amazonrobotclear.MazeSolver.Direction.Right;
-import static com.ryanwalker.problems.amazonrobotclear.MazeSolver.Direction.Up;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 // CLASS BEGINS, THIS CLASS IS REQUIRED
@@ -29,9 +23,9 @@ import java.util.List;
   -------------------------
 0  |  1  |  1  |  1  |  1  |
   -------------------------
-1  |  1  |  0  |  1  |  0  |
+1  |  1  |  0  |  9  |  0  |
   -------------------------
-2  |  0  |  o  |  1  |  0  |
+2  |  0  |  0  |  0  |  0  |
   -------------------------
 3  |  0  |  1  |  9  |  1  |
   -------------------------
@@ -43,62 +37,150 @@ import java.util.List;
  */
 
 public class MazeSolver2 {
+  private static final int OBSTACLE = 9;
+  private static final int TRENCH = 0;
+  private static final int PATH = 1;
+  private static final int VISITED = -7;
+
   int height;
   int width;
 
-  Cell[][] grid;
+  int[][] visited;
+  List<List<Integer>> theLot;
 
-  public MazeSolver2(int height, int width, List<List<Integer>> lot) {
-    this.height = height;
-    this.width = width;
-
-    this.grid = new Cell[height][width];
-
-    int ri = 0;
-    int ci = 0;
-    for (List<Integer> row : lot) {
-      for (Integer val : row) {
-        grid[ri][ci] = new Cell(val);
-      }
-      ri++;
-      ci = 0;
-    }
+  public MazeSolver2() {
   }
 
   public static void main(String[] args) {
-    List<Integer> row1 = Arrays.asList(1, 1, 1, 1);
-    List<Integer> row2 = Arrays.asList(1, 0, 1, 0);
-    List<Integer> row3 = Arrays.asList(0, 0, 1, 0);
-    List<Integer> row4 = Arrays.asList(9, 1, 1, 1);
+    List<Integer> row1 = Arrays.asList(1, 1, 1);
+    List<Integer> row2 = Arrays.asList(1, 0, 9);
+    List<Integer> row3 = Arrays.asList(0, 0, 0);
 
-    //    MazeSolver2 sol = new MazeSolver2();
+    List<List<Integer>> lot = Arrays.asList(row1, row2, row3);
 
-    //    int val = sol.removeObstacle(0,0, );
-    //    System.out.println(val);
+    MazeSolver2 solver = new MazeSolver2();
+
+    int numberMoves = solver.removeObstacle(lot.size(), lot.get(0).size(), lot);
+    System.out.println(numberMoves);
   }
 
   // METHOD SIGNATURE BEGINS, THIS METHOD IS REQUIRED
   int removeObstacle(int numRows, int numColumns, List<List<Integer>> lot) {
+    this.height = numRows;
+    this.width = numColumns;
+    this.theLot = lot;
+    visited = new int[height][width];
 
-    //
+    return explore(0, 0, 0);
+  }
 
-    return 1;
+  int explore(int row, int col, int distanceTraveled) {
+    Integer thingAtCurrentPosition = getValueAtLocation(row, col);
+    if (thingAtCurrentPosition == OBSTACLE) {
+      return distanceTraveled;
+    }
+
+    visited[row][col] = VISITED;
+
+    Coordinate up = getCoordinate(Direction.Up, row, col);
+    if (up != null) {
+      return explore(up.row, up.column, ++distanceTraveled);
+    }
+
+    Coordinate down = getCoordinate(Direction.Down, row, col);
+    if (down != null) {
+      return explore(down.row, down.column, ++distanceTraveled);
+    }
+
+    Coordinate left = getCoordinate(Direction.Left, row, col);
+    if (left != null) {
+      return explore(left.row, left.column, ++distanceTraveled);
+    }
+
+    Coordinate right = getCoordinate(Direction.Right, row, col);
+    if (right != null) {
+      return explore(right.row, right.column, ++distanceTraveled);
+    }
+//TODO - i can't return the explore value, i need to calculate it and store it or something 
+    return -1;
+  }
+
+  private Coordinate getCoordinate(Direction direction, int currentRow, int currentCol) {
+    //Return a coordinate only if
+    //  1. In bounds
+    //  2. Not a trench
+    //  3. Haven't visited yet
+    boolean inBounds = false;
+
+    Coordinate newCoordinate = null;
+
+    switch (direction) {
+      case Up:
+        newCoordinate = new Coordinate(currentRow - 1, currentCol);
+        inBounds = newCoordinate.row >= 0;
+        break;
+      case Down:
+        newCoordinate = new Coordinate(currentRow + 1, currentCol);
+        inBounds = newCoordinate.row < height;
+        break;
+      case Left:
+        newCoordinate = new Coordinate(currentRow, currentCol - 1);
+        inBounds = newCoordinate.column >= 0;
+        break;
+      case Right:
+        newCoordinate = new Coordinate(currentRow, currentCol + 1);
+        inBounds = newCoordinate.column < width;
+        break;
+    }
+
+    if (inBounds) {
+      boolean isNotTrench = theLot.get(newCoordinate.row).get(newCoordinate.column) != TRENCH;
+      boolean isNotVisited = visited[newCoordinate.row][newCoordinate.column] != VISITED;
+      if (isNotTrench && isNotVisited) {
+        return newCoordinate;
+      }
+    }
+
+    return null;
+  }
+
+  private Integer getValueAtLocation(int row, int col) {
+    return theLot.get(row).get(col);
   }
   // METHOD SIGNATURE ENDS
 
-  enum Direction {
+  public enum Direction {
     Up,
     Down,
     Left,
     Right
   }
 
-  public class Cell {
-    boolean visited;
-    int value;
+  public class Coordinate {
+    int row;
+    int column;
 
-    public Cell(Integer val) {
-      this.value = val;
+    public Coordinate(int row, int column) {
+      this.row = row;
+      this.column = column;
+    }
+
+    public int getRow() {
+      return row;
+    }
+
+    public Coordinate setRow(int row) {
+      this.row = row;
+      return this;
+    }
+
+    public int getColumn() {
+      return column;
+    }
+
+    public Coordinate setColumn(int column) {
+      this.column = column;
+      return this;
     }
   }
 }
