@@ -123,28 +123,29 @@ public class MazeSolver2 {
     //  1. In bounds
     //  2. Not a trench
     //  3. Haven't visited yet
-    boolean inBounds = false;
 
     Coordinate newCoordinate = null;
 
     switch (direction) {
       case Up:
         newCoordinate = new Coordinate(currentRow - 1, currentCol);
-        inBounds = newCoordinate.row >= 0;
         break;
       case Down:
         newCoordinate = new Coordinate(currentRow + 1, currentCol);
-        inBounds = newCoordinate.row < height;
         break;
       case Left:
         newCoordinate = new Coordinate(currentRow, currentCol - 1);
-        inBounds = newCoordinate.column >= 0;
         break;
       case Right:
         newCoordinate = new Coordinate(currentRow, currentCol + 1);
-        inBounds = newCoordinate.column < width;
         break;
     }
+
+    boolean inBounds =
+        newCoordinate.row >= 0 &&
+            newCoordinate.row < height &&
+            newCoordinate.column >= 0 &&
+            newCoordinate.column < width;
 
     if (inBounds) {
       boolean isNotTrench = theLot.get(newCoordinate.row).get(newCoordinate.column) != TRENCH;
@@ -157,10 +158,11 @@ public class MazeSolver2 {
     return null;
   }
 
+  // METHOD SIGNATURE ENDS
+
   private Integer getValueAtLocation(int row, int col) {
     return theLot.get(row).get(col);
   }
-  // METHOD SIGNATURE ENDS
 
   public enum Direction {
     Up,
@@ -176,24 +178,6 @@ public class MazeSolver2 {
     public Coordinate(int row, int column) {
       this.row = row;
       this.column = column;
-    }
-
-    public int getRow() {
-      return row;
-    }
-
-    public Coordinate setRow(int row) {
-      this.row = row;
-      return this;
-    }
-
-    public int getColumn() {
-      return column;
-    }
-
-    public Coordinate setColumn(int column) {
-      this.column = column;
-      return this;
     }
   }
 }
