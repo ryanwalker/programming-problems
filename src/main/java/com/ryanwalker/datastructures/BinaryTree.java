@@ -14,7 +14,7 @@ public class BinaryTree {
   }
 
   public boolean isBST(Node node) {
-    boolean leftIsGood = false;
+    boolean leftIsGood;
     if (node.getLeft() != null) {
       if (node.getLeft().getValue() > node.getValue()) {
         return false;

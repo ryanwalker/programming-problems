@@ -1,29 +1,11 @@
 package com.ryanwalker.problems.amazonrobotclear;
 
-// IMPORT LIBRARY PACKAGES NEEDED BY YOUR PROGRAM
-// SOME CLASSES WITHIN A PACKAGE MAY BE RESTRICTED
-// DEFINE ANY CLASS AND METHOD NEEDED
-
-import java.util.Arrays;
-import java.util.List;
-// CLASS BEGINS, THIS CLASS IS REQUIRED
-
-//This is not terribly clear to me. The input is basically a 2 dimensional Array
-// that is full of 1 for flat, 0 for trench and 9 for the obsgaclole. Ok i think i got it
-// actually. I thought the obstacle was multiple 9s but it's just a single 9.
-// So i have to find the minimum distance to the obstqcle including the obstacle?
-// or not ?? that's not clear exactly
-//I"d solve this recursively with the time i have. Then probably convert it to
-// dynamic programing.
-//
-
 /*
-
       0     1     2     3
   -------------------------
-0  |  1  |  1  |  0  |  0  |
+0  |  1  |  1  |  1  |  0  |
   -------------------------
-1  |  0  |  1  |  1  |  1  |
+1  |  1  |  0  |  1  |  1  |
   -------------------------
 2  |  9  |  0  |  0  |  1  |
   -------------------------
@@ -32,152 +14,124 @@ import java.util.List;
 
  */
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class MazeSolver2 {
-  private static final int OBSTACLE = 9;
-  private static final int TRENCH = 0;
-  private static final int PATH = 1;
-  private static final int VISITED = -7;
 
-  int height;
-  int width;
-
-  int[][] visited;
-  List<List<Integer>> theLot;
-
-  public MazeSolver2() {
-  }
-
-  public static void main(String[] args) {
-    List<Integer> row1 = Arrays.asList(1, 1, 0, 0);
-    List<Integer> row2 = Arrays.asList(0, 1, 1, 1);
-    List<Integer> row3 = Arrays.asList(9, 0, 0, 1);
-    List<Integer> row4 = Arrays.asList(1, 1, 1, 1);
-
-    List<List<Integer>> lot = Arrays.asList(row1, row2, row3, row4);
-
-    MazeSolver2 solver = new MazeSolver2();
-
-    int numberMoves = solver.removeObstacle(lot.size(), lot.get(0).size(), lot);
-    System.out.println(numberMoves);
-  }
+  public static final int PATH = 1;
+  public static final int WALL = 0;
+  public static final int OBSTACLE = 9;
 
   // METHOD SIGNATURE BEGINS, THIS METHOD IS REQUIRED
-  int removeObstacle(int numRows, int numColumns, List<List<Integer>> lot) {
-    this.height = numRows;
-    this.width = numColumns;
-    this.theLot = lot;
-    visited = new int[height][width];
+  public int removeObstacle(int numRows, int numColumns, List<List<Integer>> lot) {
+    RowCol root = new RowCol().setRow(0).setCol(0).setDepth(0);
+    List<RowCol> processingQueue = new ArrayList<>();
+    processingQueue.add(root);
 
-    return explore(0, 0, 0);
-  }
+    final Set<RowCol> visited = new HashSet<>();
 
-  int explore(int row, int col, int distanceTraveled) {
-    Integer thingAtCurrentPosition = getValueAtLocation(row, col);
-    if (thingAtCurrentPosition == OBSTACLE) {
-      return distanceTraveled;
-    }
-
-    visited[row][col] = VISITED;
-
-    Coordinate up = getCoordinate(Direction.Up, row, col);
-    if (up != null) {
-      int traveled = explore(up.row, up.column, ++distanceTraveled);
-      if (traveled > -1) {
-        return traveled;
+    while (processingQueue.size() > 0) {
+      RowCol rowCol = processingQueue.remove(0);
+      visited.add(rowCol);
+      int nodeValue = lot.get(rowCol.getRow()).get(rowCol.getCol());
+      if (nodeValue == OBSTACLE) {
+        return rowCol.getDepth();
+      } else if (nodeValue == WALL) {
+        //Don't do anything
+      } else {
+        //Get children and add them to list
+        Set<RowCol> children = getChildren(rowCol.getRow(), rowCol.getCol(), numRows, numColumns,
+            rowCol.getDepth() + 1, visited);
+        processingQueue.addAll(children);
       }
-      distanceTraveled--;
     }
 
-    Coordinate down = getCoordinate(Direction.Down, row, col);
-    if (down != null) {
-      int traveled = explore(down.row, down.column, ++distanceTraveled);
-      if (traveled > -1) {
-        return traveled;
-      }
-      distanceTraveled--;
-    }
-
-    Coordinate left = getCoordinate(Direction.Left, row, col);
-    if (left != null) {
-      int traveled = explore(left.row, left.column, ++distanceTraveled);
-      if (traveled > -1) {
-        return traveled;
-      }
-      distanceTraveled--;
-    }
-
-    Coordinate right = getCoordinate(Direction.Right, row, col);
-    if (right != null) {
-      int traveled = explore(right.row, right.column, ++distanceTraveled);
-      if (traveled > -1) {
-        return traveled;
-      }
-      distanceTraveled--;
-    }
-    distanceTraveled--;
     return -1;
   }
 
-  private Coordinate getCoordinate(Direction direction, int currentRow, int currentCol) {
-    //Return a coordinate only if
-    //  1. In bounds
-    //  2. Not a trench
-    //  3. Haven't visited yet
+  private Set<RowCol> getChildren(int row, int col, int numRows, int numCols, int depth, Set<RowCol> visited) {
+    Set<RowCol> rowCols = new HashSet<>();
 
-    Coordinate newCoordinate = null;
+    RowCol up = new RowCol().setRow(row - 1).setCol(col).setDepth(depth);
+    RowCol down = new RowCol().setRow(row + 1).setCol(col).setDepth(depth);
+    RowCol left = new RowCol().setRow(row).setCol(col - 1).setDepth(depth);
+    RowCol right = new RowCol().setRow(row).setCol(col + 1).setDepth(depth);
 
-    switch (direction) {
-      case Up:
-        newCoordinate = new Coordinate(currentRow - 1, currentCol);
-        break;
-      case Down:
-        newCoordinate = new Coordinate(currentRow + 1, currentCol);
-        break;
-      case Left:
-        newCoordinate = new Coordinate(currentRow, currentCol - 1);
-        break;
-      case Right:
-        newCoordinate = new Coordinate(currentRow, currentCol + 1);
-        break;
-    }
+    validateAndAndRowCol(up, numRows, numCols, visited, rowCols);
+    validateAndAndRowCol(down, numRows, numCols, visited, rowCols);
+    validateAndAndRowCol(left, numRows, numCols, visited, rowCols);
+    validateAndAndRowCol(right, numRows, numCols, visited, rowCols);
 
-    boolean inBounds =
-        newCoordinate.row >= 0 &&
-            newCoordinate.row < height &&
-            newCoordinate.column >= 0 &&
-            newCoordinate.column < width;
+    return rowCols;
+  }
 
-    if (inBounds) {
-      boolean isNotTrench = theLot.get(newCoordinate.row).get(newCoordinate.column) != TRENCH;
-      boolean isNotVisited = visited[newCoordinate.row][newCoordinate.column] != VISITED;
-      if (isNotTrench && isNotVisited) {
-        return newCoordinate;
+  private void validateAndAndRowCol(RowCol rowCol, int numRows, int numCols, Set<RowCol> visited, Set<RowCol> rowCols) {
+    //validate in grid
+    if (rowCol.getRow() >= 0 && rowCol.getRow() < numRows &&
+        rowCol.getCol() >= 0 && rowCol.getCol() < numCols
+    ) {
+      //Check visited
+      if (!visited.contains(rowCol)) {
+        rowCols.add(rowCol);
       }
     }
-
-    return null;
   }
 
-  // METHOD SIGNATURE ENDS
+  public static class RowCol {
+    private int depth;
+    private int row;
+    private int col;
 
-  private Integer getValueAtLocation(int row, int col) {
-    return theLot.get(row).get(col);
-  }
+    public int getDepth() {
+      return depth;
+    }
 
-  public enum Direction {
-    Up,
-    Down,
-    Left,
-    Right
-  }
+    public RowCol setDepth(int depth) {
+      this.depth = depth;
+      return this;
+    }
 
-  public class Coordinate {
-    int row;
-    int column;
+    public int getRow() {
+      return row;
+    }
 
-    public Coordinate(int row, int column) {
+    public RowCol setRow(int row) {
       this.row = row;
-      this.column = column;
+      return this;
+    }
+
+    public int getCol() {
+      return col;
+    }
+
+    public RowCol setCol(int col) {
+      this.col = col;
+      return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (obj == null) {
+        return false;
+      }
+      if (obj == this) {
+        return true;
+      }
+      if (obj.getClass() != getClass()) {
+        return false;
+      }
+      RowCol rhs = (RowCol) obj;
+
+      return this.getRow() == rhs.getRow() &&
+          this.getCol() == rhs.getCol();
+    }
+
+    @Override
+    public int hashCode() {
+      return this.getRow() * 31 + this.getCol();
     }
   }
 }

@@ -13,6 +13,20 @@ class MathSequence {
     }
   }
 
+  /**
+   * Compute n given the following formula:
+   * f(n) = f(n - 2) + f(n - 3) * 3
+   * f(0) = 1
+   * f(1) = 2
+   * f(3) = f(1) + f(0) * 3
+   */
+  public int formulaValue(int n) {
+
+
+    return -1;
+  }
+
+
   public static long numberSequence(int n) {
     if (n < 0) {
       return -100;
