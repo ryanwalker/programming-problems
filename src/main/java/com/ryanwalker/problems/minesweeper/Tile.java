@@ -9,10 +9,8 @@ import lombok.Setter;
 @Builder
 public class Tile {
 
+  private boolean flagged;
   private boolean mine;
   private boolean visible;
-  private int minesInSurroundingTiles;
-  private int row;
-  private int col;
 
 }
