@@ -99,9 +99,57 @@ public class GameGrid {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Tile tile = getTile(i, j);
-        System.out.print((tile.isMine() ? "1" : "0") + "\t");
+        if (tile.isMine()) {
+          System.out.print("❌\t");
+        } else {
+          System.out.print("\uD83D\uDE01\t");
+        }
       }
       System.out.println("\n");
+    }
+  }
+
+  public void displaySurroundingMines() {
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        Tile tile = getTile(i, j);
+        if (tile.isMine()) {
+          System.out.print("❌\t");
+        } else {
+          int surroundingMines = tile.getSurroundingMines();
+          if (surroundingMines == 0) {
+            System.out.print("\uD83D\uDE01\t");
+          } else {
+            System.out.print(numberEmoji(surroundingMines) + "\t");
+          }
+        }
+      }
+      System.out.println("\n");
+    }
+  }
+
+  private String numberEmoji(int surroundingMines) {
+    switch (surroundingMines) {
+      case 0:
+        return "⓪";
+      case 1:
+        return "①";
+      case 2:
+        return "②";
+      case 3:
+        return "③";
+      case 4:
+        return "④";
+      case 5:
+        return "⑤";
+      case 6:
+        return "⑥";
+      case 7:
+        return "⑦";
+      case 8:
+        return "⑧";
+      default:
+        return "♾️";
     }
   }
 }

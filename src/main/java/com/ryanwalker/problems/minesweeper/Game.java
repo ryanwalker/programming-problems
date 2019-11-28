@@ -15,8 +15,12 @@ public class Game {
     gameGrid = new GameGrid(difficulty.height, difficulty.width, difficulty.mines);
   }
 
-  public void displayGrid() {
+  public void displayMines() {
     gameGrid.display();
+  }
+
+  public void displaySurroundingMines() {
+    gameGrid.displaySurroundingMines();
   }
 
   enum Difficulty {
