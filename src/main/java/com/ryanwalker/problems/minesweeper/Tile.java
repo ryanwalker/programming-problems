@@ -1,16 +1,27 @@
 package com.ryanwalker.problems.minesweeper;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@Builder
+@Data
 public class Tile {
 
-  private boolean flagged;
+  private TileState tileState;
+  private int surroundingMines;
   private boolean mine;
-  private boolean visible;
+
+  public Tile(boolean mine) {
+    this.mine = mine;
+    this.tileState = TileState.hidden;
+  }
+
+  public TileAddress tileAddress;
+
+  public enum TileState {
+    hidden,
+    flagged,
+    exposed,
+  }
+
+
 
 }

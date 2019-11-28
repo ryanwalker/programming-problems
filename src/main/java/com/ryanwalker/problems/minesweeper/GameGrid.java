@@ -1,7 +1,6 @@
 package com.ryanwalker.problems.minesweeper;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -9,37 +8,44 @@ import java.util.Stack;
 /**
  * A 4x4 grid
  *
- * 1   2   3   4
- * 5   6   7   8
- * 9   10  11  12
- * 13  14  15  16
+ * 1   2   3   4 5   6   7   8 9   10  11  12 13  14  15  16
  */
 public class GameGrid {
 
-  public static void main(String[] args) {
-    GameGrid grid = new GameGrid(5);
-  }
 
   private Tile[][] grid;
   private int height;
+  private int width;
+  private int numberOfMines;
+  private int totalTiles;
+  private List<TileShift> shifts = Arrays.asList(
+      TileShift.at(-1, -1),
+      TileShift.at(-1, 0),
+      TileShift.at(-1, 1),
+      TileShift.at(0, -1),
+      TileShift.at(0, 1),
+      TileShift.at(1, -1),
+      TileShift.at(1, 0),
+      TileShift.at(1, 1)
+  );
 
-  public GameGrid(int height) {
-    // [row][column]
+  public GameGrid(int height, int width, int numberOfMines) {
     this.height = height;
-    this.grid = new Tile[height][height];
+    this.width = width;
+    this.grid = new Tile[height][width];
+    this.totalTiles = height * width;
 
-    int numOfMines = 10;
+    this.numberOfMines = numberOfMines;
 
-    initializeGrid(10);
+    initializeGrid();
   }
 
-  private void initializeGrid(int mines) {
-    int totalTiles = height * height;
+  private void initializeGrid() {
     Stack<Boolean> mineList = new Stack<>();
     while (totalTiles > 0) {
-      if (mines > 0) {
+      if (this.numberOfMines > 0) {
         mineList.add(true);
-        mines--;
+        this.numberOfMines--;
       } else {
         mineList.add(false);
       }
@@ -47,18 +53,55 @@ public class GameGrid {
     }
     Collections.shuffle(mineList);
 
-
     for (int i = 0; i < height; i++) {
-      for (int j = 0; j < height; j++) {
-        grid[i][j] = new Tile(false, mineList.pop(), false);
+      for (int j = 0; j < width; j++) {
+        Boolean mine = mineList.pop();
+        Tile tile = new Tile(mine);
+        grid[i][j] = tile;
         //Drop a tile in here
       }
     }
 
-    System.out.printf("blah");
+    //Loop through grid again, for empty tiles set the number of surrounding mines
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        int numberOfSurroundingMines = getNumberOfSurroundingMines(new TileAddress(i, j));
+        Tile tile = getTile(i, j);
+        tile.setSurroundingMines(numberOfSurroundingMines);
+      }
+    }
+  }
+
+  private int getNumberOfSurroundingMines(TileAddress tileAddress) {
+    int numberOfSurroundingMines = 0;
+    for (TileShift shift : shifts) {
+      int newRow = tileAddress.getRow() + shift.getRow();
+      int newCol = tileAddress.getColumn() + shift.getCol();
+      if (validTileAddress(newRow, newCol)) {
+        Tile tile = getTile(newRow, newCol);
+        if (tile.isMine()) {
+          numberOfSurroundingMines++;
+        }
+      }
+    }
+    return numberOfSurroundingMines;
+  }
+
+  private boolean validTileAddress(int row, int col) {
+    return row >= 0 && row < height && col >= 0 && col < width;
   }
 
   public Tile getTile(int row, int col) {
     return grid[row][col];
+  }
+
+  public void display() {
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        Tile tile = getTile(i, j);
+        System.out.print((tile.isMine() ? "1" : "0") + "\t");
+      }
+      System.out.println("\n");
+    }
   }
 }

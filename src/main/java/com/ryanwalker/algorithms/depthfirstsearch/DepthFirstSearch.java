@@ -9,14 +9,18 @@ public class DepthFirstSearch {
 
   public static void main(String[] args) {
     int[][] array = {
-        {7, 2, 7},
-        {7, 2, 7},
-        {7, 7, 7}
+        {0, 0, 0, 1, 0, 0, 0},
+        {0, 0, 1, 1, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 1, 1, 0, 1, 1},
+        {0, 0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 0},
+        {1, 1, 1, 1, 0, 0, 0}
     };
 
     Grid grid = new Grid(array);
     System.out.println(grid.maxConnectedColors());
-    
+
   }
 
 
