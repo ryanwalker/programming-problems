@@ -16,9 +16,6 @@ public class Tile {
 
   public TileAddress tileAddress;
 
-  /**
-   *
-   */
   public void display() {
     System.out.print(tileState.icon);
   }
