@@ -16,10 +16,27 @@ public class Tile {
 
   public TileAddress tileAddress;
 
+  /**
+   *
+   */
+  public void display() {
+    System.out.print(tileState.icon);
+  }
+
   public enum TileState {
-    hidden,
-    flagged,
-    exposed,
+//    hidden("😁"),
+    hidden("➖"),
+    flagged("🚩"),
+    empty(" "),
+    exploded("❌"),
+    showSurrounding(""),
+    ;
+
+    private final String icon;
+
+    TileState(String icon) {
+      this.icon = icon;
+    }
   }
 
 

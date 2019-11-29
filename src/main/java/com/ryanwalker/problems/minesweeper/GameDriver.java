@@ -5,11 +5,11 @@ import com.ryanwalker.problems.minesweeper.Game.Difficulty;
 public class GameDriver {
 
   public static void main(String[] args) {
-    Game game = new Game(Difficulty.medium);
+    Game game = new Game(Difficulty.easy);
 
-    game.displayMines();
+    game.reveal();
     System.out.println("\n");
-    game.displaySurroundingMines();
+    game.display();
 
 
 

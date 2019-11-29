@@ -2,6 +2,7 @@ package com.ryanwalker.problems.minesweeper;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,6 +19,8 @@ public class GameGrid {
   private int width;
   private int numberOfMines;
   private int totalTiles;
+  private List<TileAddress> placedMines;
+
   private List<TileShift> shifts = Arrays.asList(
       TileShift.at(-1, -1),
       TileShift.at(-1, 0),
@@ -36,6 +39,7 @@ public class GameGrid {
     this.totalTiles = height * width;
 
     this.numberOfMines = numberOfMines;
+    this.placedMines = new LinkedList<>();
 
     initializeGrid();
   }
@@ -51,11 +55,15 @@ public class GameGrid {
       }
       totalTiles--;
     }
+    //Randomize the mineList
     Collections.shuffle(mineList);
 
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Boolean mine = mineList.pop();
+        if (mine) {
+          placedMines.add(TileAddress.at(i, j));
+        }
         Tile tile = new Tile(mine);
         grid[i][j] = tile;
         //Drop a tile in here
@@ -99,17 +107,17 @@ public class GameGrid {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Tile tile = getTile(i, j);
-        if (tile.isMine()) {
-          System.out.print("❌\t");
-        } else {
-          System.out.print("\uD83D\uDE01\t");
-        }
+        tile.display();
+        System.out.print("\t");
       }
-      System.out.println("\n");
+      System.out.print("\n\n");
     }
+
   }
 
-  public void displaySurroundingMines() {
+
+  //TODO - abstract out the for loop, functional programming?
+  public void displayRevealedBoard() {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Tile tile = getTile(i, j);
@@ -118,7 +126,7 @@ public class GameGrid {
         } else {
           int surroundingMines = tile.getSurroundingMines();
           if (surroundingMines == 0) {
-            System.out.print("\uD83D\uDE01\t");
+            System.out.print("➖\t");
           } else {
             System.out.print(numberEmoji(surroundingMines) + "\t");
           }
@@ -152,4 +160,5 @@ public class GameGrid {
         return "♾️";
     }
   }
+
 }
