@@ -6,13 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-/**
- * A 4x4 grid
- *
- * 1   2   3   4 5   6   7   8 9   10  11  12 13  14  15  16
- */
 public class GameGrid {
-
 
   private Tile[][] grid;
   private int height;
@@ -20,6 +14,11 @@ public class GameGrid {
   private int numberOfMines;
   private int totalTiles;
   private List<TileAddress> placedMines;
+  private String[] letters = {
+      "A", "B", "C", "D", "E", "F", "G", "H",
+      "I", "J", "K", "L", "M", "N", "O", "P",
+      "Q", "R", "S", "T", "U", "V", "W", "X",
+      "Y", "Z"};
 
   private List<TileShift> shifts = Arrays.asList(
       TileShift.at(-1, -1),
@@ -104,8 +103,12 @@ public class GameGrid {
   }
 
   public void display() {
+    displayColumnHeaders();
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
+        if (j == 0) {
+          System.out.print(i + 1 + "\t");
+        }
         Tile tile = getTile(i, j);
         tile.display();
         System.out.print("\t");
@@ -115,11 +118,23 @@ public class GameGrid {
 
   }
 
+  public void displayColumnHeaders() {
+    System.out.print("\t");
+    for (int i = 0; i < width; i++) {
+      System.out.print(letters[i] + "\t\t");
+    }
+    System.out.print("\n\n");
+  }
+
 
   //TODO - abstract out the for loop, functional programming?
   public void displayRevealedBoard() {
+    displayColumnHeaders();
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
+        if (j == 0) {
+          System.out.print(i + 1 + "\t");
+        }
         Tile tile = getTile(i, j);
         if (tile.isMine()) {
           System.out.print("❌\t");
