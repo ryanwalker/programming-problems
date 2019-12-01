@@ -5,8 +5,8 @@ import com.ryanwalker.problems.minesweeper.Game.GameStatus;
 public class MinesweeperUserInterface {
 
 
-  public void displayInstructions(GameStatus gameStatus) {
-    switch (gameStatus) {
+  public void play(Game game) {
+    switch (game.getGameStatus()) {
       case ready:
         start();
         break;
@@ -31,18 +31,20 @@ public class MinesweeperUserInterface {
 
   public void start() {
     System.out.println("Please Select a Difficulty Level");
-    System.out.println("1. Easy");
-    System.out.println("2. Medium");
-    System.out.println("3. Hard");
+    System.out.println("Easy:   1");
+    System.out.println("Medium: 2");
+    System.out.println("Hard:   3");
   }
 
   public void playing() {
     System.out.println("Please select a tile");
+    System.out.println("\n");
     System.out.println("Uncover tile: u + tile address: u B4");
     System.out.println("Flag a  tile: f + tile address: f F7");
-    System.out.println("Remove  flat: r + tile address: r D3");
+    System.out.println("Remove  flag: r + tile address: r D3");
     System.out.println();
     System.out.println("Start a new game: reset");
+    System.out.println("Quit: quit");
   }
 
   public void gameOver() {
@@ -50,4 +52,7 @@ public class MinesweeperUserInterface {
   }
 
 
+  public void quit() {
+    System.out.println("Thanks for playing Minesweeper!");
+  }
 }
