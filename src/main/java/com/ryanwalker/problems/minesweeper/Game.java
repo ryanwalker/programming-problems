@@ -1,5 +1,6 @@
 package com.ryanwalker.problems.minesweeper;
 
+import com.ryanwalker.problems.minesweeper.Tile.TileState;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
@@ -50,14 +51,42 @@ public class Game {
           setDifficulty(difficulty);
           initialize();
           setGameStatus(GameStatus.playing);
-          display();
+          break;
         case playing:
+          // Parse tile selection command
+          GameCommand command = GameCommand.parse(input);
+
+          // process command
+          apply(command);
           break;
         case won:
           break;
         case lost:
           break;
       }
+    }
+  }
+
+  private void apply(GameCommand command) {
+    switch (command.getCommand()) {
+      case flag:
+        //TODO - keep track of flags
+        Tile tile = gameGrid
+            .getTile(command.getTileAddress().getRow(), command.getTileAddress().getColumn());
+
+        //TODO - Only allow flagging total number of mines
+        //TODO - Only allow flagging hidden tiles
+        if (tile.getTileState() == TileState.flagged) {
+          tile.setTileState(TileState.hidden);
+        } else {
+          tile.setTileState(TileState.flagged);
+        }
+
+        break;
+      case unflag:
+        break;
+      case uncover:
+        break;
     }
   }
 

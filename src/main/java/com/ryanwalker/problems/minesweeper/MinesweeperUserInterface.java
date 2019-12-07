@@ -1,7 +1,5 @@
 package com.ryanwalker.problems.minesweeper;
 
-import com.ryanwalker.problems.minesweeper.Game.GameStatus;
-
 public class MinesweeperUserInterface {
 
 
@@ -11,7 +9,7 @@ public class MinesweeperUserInterface {
         start();
         break;
       case playing:
-        playing();
+        playing(game);
         break;
       case won:
       case lost:
@@ -36,7 +34,7 @@ public class MinesweeperUserInterface {
     System.out.println("Hard:   3");
   }
 
-  public void playing() {
+  public void playing(Game game) {
     System.out.println("Please select a tile");
     System.out.println("\n");
     System.out.println("Uncover tile: u + tile address: u B4");
@@ -45,6 +43,7 @@ public class MinesweeperUserInterface {
     System.out.println();
     System.out.println("Start a new game: reset");
     System.out.println("Quit: quit");
+    game.display();
   }
 
   public void gameOver() {

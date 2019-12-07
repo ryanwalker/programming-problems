@@ -28,6 +28,7 @@ public class GameDriver {
 
       }
     } catch (Exception e) {
+      System.out.println(e);
     }
 
     userInterface.quit();
