@@ -1,12 +1,8 @@
 package com.ryanwalker.problems.minesweeper;
 
-import com.google.common.base.Preconditions;
 import com.ryanwalker.problems.minesweeper.exception.IllegalGameCommandException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.Data;
-
-@Data
 public class GameCommand {
 
   //ASCII a, subtract this to get 0 based column
@@ -14,24 +10,44 @@ public class GameCommand {
   private GameOperation operation;
   private TileAddress tileAddress;
 
+
+  public static int getOFFSET() {
+    return OFFSET;
+  }
+
+  public GameOperation getOperation() {
+    return operation;
+  }
+
+  public void setOperation(GameOperation operation) {
+    this.operation = operation;
+  }
+
+  public TileAddress getTileAddress() {
+    return tileAddress;
+  }
+
+  public void setTileAddress(TileAddress tileAddress) {
+    this.tileAddress = tileAddress;
+  }
+
   public GameCommand(String gameCommand) throws IllegalGameCommandException {
     operation = parseOperation(gameCommand);
     tileAddress = parseTileAddress(gameCommand);
-    // TODO - verify address is actually in the game grid
   }
 
-  public GameOperation parseOperation(String commandString) throws IllegalGameCommandException {
+  private GameOperation parseOperation(String commandString) throws IllegalGameCommandException {
     // Argument validation
-    Preconditions.checkNotNull(commandString);
-    Preconditions.checkArgument(commandString.length() >= 2, "command legnth too short");
+//    Preconditions.checkNotNull(commandString);
+//    Preconditions.checkArgument(commandString.length() >= 2, "command legnth too short");
 
     // Parse the command
     char commandChar = Character.toLowerCase(commandString.charAt(0));
 
     // Set command
     switch (commandChar) {
-      case 'p':
-        return GameOperation.uncover;
+      case 's':
+        return GameOperation.select;
       case 'f':
         return GameOperation.flag;
       default:
@@ -56,7 +72,7 @@ public class GameCommand {
       boolean isDigit = Character.isDigit(rowChar);
 
       if (isLetter && isDigit) {
-        return new TileAddress(parseRow(rowChar + ""), parseColumn(columnChar + ""));
+//        return new TileAddress(parseRow(rowChar + ""), parseColumn(columnChar + ""));
       } else {
         badCommand();
       }
@@ -83,7 +99,7 @@ public class GameCommand {
       } else {
         badCommand();
       }
-      return new TileAddress(parseRow(rowString), parseColumn(colString));
+//      return new TileAddress(parseRow(rowString), parseColumn(colString));
     } else if (gridAddress.length() == 4) {
       // pzz52
       //letter letter digit digit
@@ -94,7 +110,7 @@ public class GameCommand {
       if (isLetter1 && isLetter2 && isDigit1 && isDigit2) {
         String colString = gridAddress.substring(0, 2);
         String rowString = gridAddress.substring(2);
-        return new TileAddress(parseRow(rowString), parseColumn(colString));
+//        return new TileAddress(parseRow(rowString), parseColumn(colString));
       }
     }
     badCommand();
@@ -106,17 +122,28 @@ public class GameCommand {
   }
 
   private int parseRow(String tileGridNumber) {
-    return Integer.parseInt(tileGridNumber.substring(1)) - 1;
+    return Integer.parseInt(tileGridNumber) - 1;
   }
 
-  private int parseColumn(String tileGridNumber) {
+  private int parseColumn(String tileGridNumber) throws IllegalGameCommandException {
     //Assume it's lowercase
-    int letter = tileGridNumber.charAt(0);
-    return letter - OFFSET;
+    if (tileGridNumber.length() == 1) {
+      int letter = tileGridNumber.charAt(0);
+      return letter - OFFSET;
+    } else if (tileGridNumber.length() == 2) {
+      int firstLetter = tileGridNumber.charAt(0);
+      firstLetter = firstLetter - 96;
+      int secondLetter = tileGridNumber.charAt(1);
+      secondLetter = secondLetter - 96;
+
+      int col = 26 * firstLetter + secondLetter;
+      return col;
+    }
+    throw new IllegalGameCommandException();
   }
 
   enum GameOperation {
-    uncover,
+    select,
     flag,
   }
 

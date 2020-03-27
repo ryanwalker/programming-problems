@@ -1,14 +1,8 @@
 package com.ryanwalker.datastructures;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.util.Arrays;
 
-@Getter
-@Setter
-@Accessors(chain = true)
 //TODO - generecize heap type
 public class IntegerHeap {
   private int capacity = 10;

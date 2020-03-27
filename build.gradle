@@ -1,25 +1,21 @@
 plugins {
-  id 'io.franzbecker.gradle-lombok' version '1.14'
-  id 'java'
+    id 'java'
+    id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
-lombok {
-  version = '1.18.2'
-  sha256 = ""
-}
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  testImplementation(
-      'org.junit.jupiter:junit-jupiter-api:5.1.0'
-  )
-  testRuntimeOnly(
-      'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-  )
-  implementation 'org.apache.commons:commons-lang3:3.7'
-  implementation 'com.google.guava:guava:28.1-jre'
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    )
+    testRuntimeOnly(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    )
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'com.google.guava:guava:28.1-jre'
 
 }

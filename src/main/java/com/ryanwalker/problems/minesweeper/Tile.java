@@ -1,8 +1,5 @@
 package com.ryanwalker.problems.minesweeper;
 
-import lombok.Data;
-
-@Data
 public class Tile {
 
   private TileState tileState;
@@ -15,6 +12,38 @@ public class Tile {
   }
 
   public TileAddress tileAddress;
+
+  public TileState getTileState() {
+    return tileState;
+  }
+
+  public void setTileState(TileState tileState) {
+    this.tileState = tileState;
+  }
+
+  public int getSurroundingMines() {
+    return surroundingMines;
+  }
+
+  public void setSurroundingMines(int surroundingMines) {
+    this.surroundingMines = surroundingMines;
+  }
+
+  public boolean isMine() {
+    return mine;
+  }
+
+  public void setMine(boolean mine) {
+    this.mine = mine;
+  }
+
+  public TileAddress getTileAddress() {
+    return tileAddress;
+  }
+
+  public void setTileAddress(TileAddress tileAddress) {
+    this.tileAddress = tileAddress;
+  }
 
   public void display() {
     System.out.print(tileState.icon);

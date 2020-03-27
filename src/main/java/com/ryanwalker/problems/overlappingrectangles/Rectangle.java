@@ -1,18 +1,21 @@
 package com.ryanwalker.problems.overlappingrectangles;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Accessors(chain = true)
-@Getter
-@Setter
 public class Rectangle {
   List<Coordinate> coordinates = new ArrayList<>();
+
+  public List<Coordinate> getCoordinates() {
+    return coordinates;
+  }
+
+  public void setCoordinates(
+      List<Coordinate> coordinates) {
+    this.coordinates = coordinates;
+  }
 
   public Coordinate getMaxX() {
     return coordinates.stream()

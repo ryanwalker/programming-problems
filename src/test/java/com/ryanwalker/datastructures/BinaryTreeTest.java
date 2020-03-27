@@ -3,7 +3,7 @@ package com.ryanwalker.datastructures;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class BinaryTreeTest {
+public class BinaryTreeTest {
 
   @Test
   public void testNotBinarySearchTree() {

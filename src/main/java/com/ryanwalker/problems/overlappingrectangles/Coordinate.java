@@ -1,14 +1,13 @@
 package com.ryanwalker.problems.overlappingrectangles;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-@AllArgsConstructor
 public class Coordinate {
   private int x;
   private int y;
+
+  public Coordinate(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 
   public int getX() {
     return x;

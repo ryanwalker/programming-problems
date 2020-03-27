@@ -1,7 +1,5 @@
 package com.ryanwalker.problems.kubracards;
 
-import lombok.val;
-
 public enum FaceValue {
 
   ace(1),

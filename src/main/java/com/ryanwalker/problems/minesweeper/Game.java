@@ -1,11 +1,10 @@
 package com.ryanwalker.problems.minesweeper;
 
 import com.ryanwalker.problems.minesweeper.Tile.TileState;
+import com.ryanwalker.problems.minesweeper.exception.IllegalGameCommandException;
 import java.util.LinkedList;
 import java.util.List;
-import lombok.Data;
 
-@Data
 public class Game {
 
   private Difficulty difficulty;
@@ -54,8 +53,13 @@ public class Game {
           break;
         case playing:
           // Parse tile selection command
-          GameCommand command = GameCommand.parse(input);
-
+          GameCommand command = null;
+          try {
+            command = new GameCommand(input);
+          } catch (IllegalGameCommandException e) {
+            //Bad command so break;
+            break;
+          }
           // process command
           apply(command);
           break;
@@ -67,8 +71,16 @@ public class Game {
     }
   }
 
+  private void setGameStatus(GameStatus playing) {
+    this.gameStatus = playing;
+  }
+
+  private void setDifficulty(Difficulty difficulty) {
+    this.difficulty = difficulty;
+  }
+
   private void apply(GameCommand command) {
-    switch (command.getCommand()) {
+    switch (command.getOperation()) {
       case flag:
         //TODO - keep track of flags
         Tile tile = gameGrid
@@ -83,15 +95,17 @@ public class Game {
         }
 
         break;
-      case unflag:
-        break;
-      case uncover:
+      case select:
         break;
     }
   }
 
   private void quit() {
     throw new RuntimeException("Quit");
+  }
+
+  public GameStatus getGameStatus() {
+    return gameStatus;
   }
 
   enum Difficulty {
