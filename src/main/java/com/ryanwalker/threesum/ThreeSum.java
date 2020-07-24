@@ -31,24 +31,13 @@ public class ThreeSum {
   public List<List<Integer>> threeSum(int[] nums) {
     // index the values:
     Map<Integer, Integer> numberIndex = createIndex(nums);
-    
-    // Loop through each key in the index, number, finding the twoSum values
-    Set<List<Integer>> retVal = new HashSet<>();
-    for (int i = 0; i < nums.length; i++) {
-      int value = nums[i];
-      // Create array with current value removed
-      int[] subArray = createSubArray(nums, i);
-      List<List<Integer>> twoSums = twoSum(subArray, -1 * value);
-      if (twoSums.size() > 0) {
-        // add value to eac of the twoSum values them together
-        for (List<Integer> twoSum : twoSums) {
-          twoSum.add(value);
-          Collections.sort(twoSum);
-          retVal.add(twoSum);
-        }
-      }
+
+    // Loop through each number (key), finding the twoSum values
+    for (Integer number : numberIndex.keySet()) {
+      // Remove number from the index before two-summing
+      
     }
-    return new ArrayList<>(retVal);
+
   }
 
   private Map<Integer, Integer> createIndex(int[] nums) {
