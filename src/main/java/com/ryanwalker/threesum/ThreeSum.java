@@ -16,7 +16,8 @@ public class ThreeSum {
 
 //    int[] nums = {-1, 0, 1, 2, -1, -4};
 //    int[] nums = {-1, 0, 1};
-    int[] nums = {-1, -1, -1, 3, 3, 0, -2, -1, 1, 2, 1, 4, 8, 8, 6, 6, 7, 5, 3, 3, 3, 3, 3, 3, 3, 5};
+    int[] nums = {-1, -1, -1, 3, 3, 0, -2, -1, 1, 2, 1, 4, 8, 8, 6, 6, 7, 5, 3, 3, 3, 3, 3, 3, 3,
+        5};
 
 //    List<List<Integer>> val = threeSum.twoSum(nums, 2);
     List<List<Integer>> val = threeSum.threeSum(nums);
@@ -35,9 +36,9 @@ public class ThreeSum {
     // Loop through each number (key), finding the twoSum values
     for (Integer number : numberIndex.keySet()) {
       // Remove number from the index before two-summing
-      
-    }
 
+    }
+    return null;
   }
 
   private Map<Integer, Integer> createIndex(int[] nums) {
@@ -65,7 +66,7 @@ public class ThreeSum {
         // just need 1 value in index
       }
     }
-
+    return null;
   }
 
   private static void print(List<List<Integer>> val) {
