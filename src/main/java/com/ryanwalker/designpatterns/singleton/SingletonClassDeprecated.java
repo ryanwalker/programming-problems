@@ -1,4 +1,4 @@
-package com.ryanwalker.concurrency.singleton;
+package com.ryanwalker.designpatterns.singleton;
 
 // This double-checked locking pattern some consider anti-pattern
 public class SingletonClassDeprecated {
