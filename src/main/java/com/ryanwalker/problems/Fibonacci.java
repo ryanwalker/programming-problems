@@ -5,14 +5,15 @@ import java.util.Map;
 
 public class Fibonacci {
 
+
   public static void main(String[] args) {
-    int num = fibonacci(100);
-    System.out.println(num);
+    System.out.println(fibonacciMemoized(17));
+    System.out.println(fibonacciDynamic(17));
   }
 
   private static Map<Integer, Long> memo = new HashMap<>();
 
-  private static int fibonacci(int i) {
+  private static int fibonacciMemoized(int i) {
     if (i == 0) {
       return 0;
     } else if (i == 1) {
@@ -27,7 +28,27 @@ public class Fibonacci {
 
       }
 
-      return fibonacci(i - 1) + fibonacci(i - 2);
     }
   }
+
+
+  private static int fibonacciDynamic(int f) {
+    if (f == 0) {
+      return 0;
+    } else if (f == 1) {
+      return 1;
+    } else {
+      // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55
+      int a = 0;
+      int b = 1;
+      int next = 0;
+      for (int i = 2; i <= f; i++) {
+        next = a + b;
+        a = b;
+        b = next;
+      }
+      return next;
+    }
+  }
+
 }
